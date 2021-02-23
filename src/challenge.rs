@@ -36,39 +36,29 @@ impl Vertex {
 }
 
 const VERTICES: &[Vertex] = &[
-    Vertex { position: [0.0, 0.5, 0.0], color: [1.0, 0.0, 0.0] },
-    Vertex { position: [-0.5, -0.5, 0.0], color: [0.0, 1.0, 0.0] },
-    Vertex { position: [0.5, -0.5, 0.0], color: [0.0, 0.0, 1.0] },
+    Vertex {
+        position: [-0.0868241, 0.49240386, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // A
+    Vertex {
+        position: [-0.49513406, 0.06958647, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // B
+    Vertex {
+        position: [-0.21918549, -0.44939706, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // C
+    Vertex {
+        position: [0.35966998, -0.3473291, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // D
+    Vertex {
+        position: [0.44147372, 0.2347359, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // E
 ];
- 
-//HEX
-// const VERTICES: &[Vertex] = &[
-//     Vertex {
-//         position: [-0.0868241, 0.49240386, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // A
-//     Vertex {
-//         position: [-0.49513406, 0.06958647, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // B
-//     Vertex {
-//         position: [-0.21918549, -0.44939706, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // C
-//     Vertex {
-//         position: [0.35966998, -0.3473291, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // D
-//     Vertex {
-//         position: [0.44147372, 0.2347359, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // E
-// ];
 
-const INDICES: &[u16] = &[
-    0, 1, 2, 
-    3, 4, 5, 
-    6, 7, 8];
+const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4];
 
 struct State {
     surface: wgpu::Surface,
@@ -76,12 +66,19 @@ struct State {
     queue: wgpu::Queue,
     sc_desc: wgpu::SwapChainDescriptor,
     swap_chain: wgpu::SwapChain,
-    size: winit::dpi::PhysicalSize<u32>,
+
     render_pipeline: wgpu::RenderPipeline,
-    // NEW!
+
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
     num_indices: u32,
+
+    challenge_vertex_buffer: wgpu::Buffer,
+    challenge_index_buffer: wgpu::Buffer,
+    num_challenge_indices: u32,
+    use_complex: bool,
+
+    size: winit::dpi::PhysicalSize<u32>,
 }
 
 impl State {
@@ -179,17 +176,54 @@ impl State {
         });
         let num_indices = INDICES.len() as u32;
 
+        let num_vertices = 16;
+        let angle = std::f32::consts::PI * 2.0 / num_vertices as f32;
+        let challenge_verts = (0..num_vertices)
+            .map(|i| {
+                let theta = angle * i as f32;
+                Vertex {
+                    position: [0.5 * theta.cos(), -0.5 * theta.sin(), 0.0],
+                    color: [(1.0 + theta.cos()) / 2.0, (1.0 + theta.sin()) / 2.0, 1.0],
+                }
+            })
+            .collect::<Vec<_>>();
+
+        let num_triangles = num_vertices - 2;
+        let challenge_indices = (1u16..num_triangles + 1)
+            .into_iter()
+            .flat_map(|i| vec![i + 1, i, 0])
+            .collect::<Vec<_>>();
+        let num_challenge_indices = challenge_indices.len() as u32;
+
+        let challenge_vertex_buffer =
+            device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+                label: Some("Challenge Vertex Buffer"),
+                contents: bytemuck::cast_slice(&challenge_verts),
+                usage: wgpu::BufferUsage::VERTEX,
+            });
+        let challenge_index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Challenge Index Buffer"),
+            contents: bytemuck::cast_slice(&challenge_indices),
+            usage: wgpu::BufferUsage::INDEX,
+        });
+
+        let use_complex = false;
+
         Self {
             surface,
             device,
             queue,
             sc_desc,
             swap_chain,
-            size,
             render_pipeline,
             vertex_buffer,
             index_buffer,
             num_indices,
+            challenge_vertex_buffer,
+            challenge_index_buffer,
+            num_challenge_indices,
+            use_complex,
+            size,
         }
     }
 
@@ -200,9 +234,22 @@ impl State {
         self.swap_chain = self.device.create_swap_chain(&self.surface, &self.sc_desc);
     }
 
-    #[allow(unused_variables)]
     fn input(&mut self, event: &WindowEvent) -> bool {
-        false
+        match event {
+            WindowEvent::KeyboardInput {
+                input:
+                    KeyboardInput {
+                        state,
+                        virtual_keycode: Some(VirtualKeyCode::Space),
+                        ..
+                    },
+                ..
+            } => {
+                self.use_complex = *state == ElementState::Pressed;
+                true
+            }
+            _ => false,
+        }
     }
 
     fn update(&mut self) {}
@@ -222,7 +269,12 @@ impl State {
                     attachment: &frame.view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color::BLACK),
+                        load: wgpu::LoadOp::Clear(wgpu::Color {
+                            r: 0.1,
+                            g: 0.2,
+                            b: 0.3,
+                            a: 1.0,
+                        }),
                         store: true,
                     },
                 }],
@@ -230,9 +282,20 @@ impl State {
             });
 
             render_pass.set_pipeline(&self.render_pipeline);
-            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.set_index_buffer(self.index_buffer.slice(..));
-            render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+
+            let data = if self.use_complex {
+                (
+                    &self.challenge_vertex_buffer,
+                    &self.challenge_index_buffer,
+                    self.num_challenge_indices,
+                )
+            } else {
+                (&self.vertex_buffer, &self.index_buffer, self.num_indices)
+            };
+            render_pass.set_vertex_buffer(0, data.0.slice(..));
+            render_pass.set_index_buffer(data.1.slice(..));
+
+            render_pass.draw_indexed(0..data.2, 0, 0..1);
         }
 
         self.queue.submit(iter::once(encoder.finish()));
@@ -245,8 +308,6 @@ fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-
-    window.set_title("WebGPU");
 
     use futures::executor::block_on;
 
