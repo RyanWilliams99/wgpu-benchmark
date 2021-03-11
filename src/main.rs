@@ -380,7 +380,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("cube.obj"),
+            res_dir.join("viking-room.obj"),
         )
         .unwrap();
 
