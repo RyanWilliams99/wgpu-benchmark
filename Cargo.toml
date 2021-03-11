@@ -1,28 +1,24 @@
 [package]
 name = "tutorial4-buffer"
 version = "0.1.0"
-authors = ["Ben Hansen <bhbenjaminhansen@gmail.com>"]
+authors = ["Ryan Williams"]
 edition = "2018"
 
 
 [dependencies]
-image = "0.23"
-winit = "0.22"
+anyhow = "1.0"
+bytemuck = { version = "1.4", features = [ "derive" ] }
 cgmath = "0.17"
-wgpu = "0.6"
 env_logger = "0.7"
 log = "0.4"
 futures = "0.3"
-# NEW!
-bytemuck = { version = "1.4", features = [ "derive" ] }
+image = "0.23"
+wgpu = "0.7"
+winit = "0.22"
 
 [build-dependencies]
 anyhow = "1.0"
 fs_extra = "1.2"
 glob = "0.3"
 shaderc = "0.7"
-
-[[bin]]
-name = "test-webgpu"
-path = "src/main.rs"
 
