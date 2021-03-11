@@ -35,40 +35,39 @@ impl Vertex {
     }
 }
 
-const VERTICES: &[Vertex] = &[
-    Vertex { position: [0.0, 0.5, 0.0], color: [1.0, 0.0, 0.0] },
-    Vertex { position: [-0.5, -0.5, 0.0], color: [0.0, 1.0, 0.0] },
-    Vertex { position: [0.5, -0.5, 0.0], color: [0.0, 0.0, 1.0] },
-];
- 
-//HEX
+//TRIANGLE
 // const VERTICES: &[Vertex] = &[
-//     Vertex {
-//         position: [-0.0868241, 0.49240386, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // A
-//     Vertex {
-//         position: [-0.49513406, 0.06958647, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // B
-//     Vertex {
-//         position: [-0.21918549, -0.44939706, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // C
-//     Vertex {
-//         position: [0.35966998, -0.3473291, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // D
-//     Vertex {
-//         position: [0.44147372, 0.2347359, 0.0],
-//         color: [0.5, 0.0, 0.5],
-//     }, // E
+//     Vertex { position: [0.0, 0.5, 0.0], color: [1.0, 0.0, 0.0] }, //top vertex, red
+//     Vertex { position: [-0.5, -0.5, 0.0], color: [0.0, 1.0, 0.0] }, //right vertex, green
+//     Vertex { position: [0.5, -0.5, 0.0], color: [0.0, 0.0, 1.0] }, //left vertex, blue
+// ];
+ 
+// const INDICES: &[u16] = &[
+//     0, 1, 2,
 // ];
 
+
+//SQUARE
+const VERTICES: &[Vertex] = &[
+    Vertex {
+        position: [-0.5, 0.5, 0.0], color: [0.5, 0.5, 0.5], //top left
+    }, 
+    Vertex {
+        position: [-0.5, -0.5, 0.0], color: [0.5, 0.5, 0.5], //bottom left 
+    }, 
+    Vertex {
+        position: [0.5, -0.5, 0.0], color: [0.5, 0.5, 0.5], //bottom right
+    }, 
+    Vertex {
+        position: [0.5, 0.5, 0.0], color: [0.5, 0.5, 0.5], //top right
+    }, 
+];
+
 const INDICES: &[u16] = &[
-    0, 1, 2, 
-    3, 4, 5, 
-    6, 7, 8];
+    0, 1, 2,
+    0, 2, 3,
+    ];
+
 
 struct State {
     surface: wgpu::Surface,
@@ -78,7 +77,7 @@ struct State {
     swap_chain: wgpu::SwapChain,
     size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
-    // NEW!
+
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
     num_indices: u32,
@@ -88,8 +87,6 @@ impl State {
     async fn new(window: &Window) -> Self {
         let size = window.inner_size();
 
-        // The instance is a handle to our GPU
-        // BackendBit::PRIMARY => Vulkan + Metal + DX12 + Browser WebGPU
         let instance = wgpu::Instance::new(wgpu::BackendBit::PRIMARY);
         let surface = unsafe { instance.create_surface(window) };
         let adapter = instance
@@ -107,7 +104,7 @@ impl State {
                     limits: wgpu::Limits::default(),
                     shader_validation: true,
                 },
-                None, // Trace path
+                None, 
             )
             .await
             .unwrap();
@@ -250,7 +247,7 @@ fn main() {
 
     use futures::executor::block_on;
 
-    // Since main can't be async, we're going to need to block
+
     let mut state = block_on(State::new(&window));
 
     event_loop.run(move |event, _, control_flow| {
