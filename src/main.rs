@@ -380,7 +380,12 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("LibertStatue.obj"),
+            res_dir.join("viking-room/viking-room.obj"),
+            //res_dir.join("cube/cube.obj"),
+            //res_dir.join("liberty/LibertStatue.obj"),
+            //res_dir.join("tree/lowpolytree.obj"),
+
+
         )
         .unwrap();
 
