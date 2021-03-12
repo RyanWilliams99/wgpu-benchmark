@@ -78,8 +78,7 @@ impl Model {
         let mut materials = Vec::new();
         for mat in obj_materials {
             let diffuse_path = mat.diffuse_texture;
-            let diffuse_texture =
-                texture::Texture::load(device, queue, containing_folder.join(diffuse_path))?;
+            let diffuse_texture = texture::Texture::load(device, queue, containing_folder.join(diffuse_path))?;
 
             let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
                 layout,
