@@ -383,7 +383,7 @@ impl State {
             res_dir.join("viking-room/viking-room.obj"),
             //res_dir.join("cube/cube.obj"),
             //res_dir.join("liberty/LibertStatue.obj"),
-            //res_dir.join("tree/lowpolytree.obj"),
+            //res_dir.join("boat/boat.obj"),
 
 
         )
