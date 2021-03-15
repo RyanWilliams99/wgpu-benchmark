@@ -1,5 +1,5 @@
 [package]
-name = "webgpu-benchmark"
+name = "wgpu-benchmark"
 version = "0.1.0"
 authors = ["Ryan"]
 edition = "2018"

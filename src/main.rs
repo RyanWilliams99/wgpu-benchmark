@@ -324,8 +324,8 @@ impl State {
 
         //const SPACE_BETWEEN: f32 = 1.0;
         let instances = (0..NUM_INSTANCES_PER_ROW)
-            .flat_map(|z| {
-                (0..NUM_INSTANCES_PER_ROW).map(move |x| {
+            .flat_map(|_z| {
+                (0..NUM_INSTANCES_PER_ROW).map(move |_x| {
                     //let x = SPACE_BETWEEN * (x as f32 - NUM_INSTANCES_PER_ROW as f32 / 2.0);
                     //let z = SPACE_BETWEEN * (z as f32 - NUM_INSTANCES_PER_ROW as f32 / 2.0);
 
@@ -547,18 +547,14 @@ fn main() {
     let event_loop = EventLoop::new();
     let title = env!("CARGO_PKG_NAME");
 
-    let mut resizeable = false;
-    
+    let resizable = false;
     let window = winit::window::WindowBuilder::new()
         .with_title(title)
-        .set_inner_size(winit::dpi::PhysicalSize::new(400.0, 200.0))
-        .with_resizable(false)
+        .with_inner_size(LogicalSize::new(800, 600))
+        .with_resizable(resizable)
         .build(&event_loop)
         .unwrap();
         
-
-
-
     use futures::executor::block_on;
     let mut state = block_on(State::new(&window));
     event_loop.run(move |event, _, control_flow| {

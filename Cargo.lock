@@ -1960,25 +1960,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "webgpu-benchmark"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytemuck",
- "cgmath",
- "env_logger",
- "fs_extra",
- "futures",
- "glob",
- "image",
- "log",
- "shaderc",
- "tobj",
- "wgpu",
- "winit",
-]
-
-[[package]]
 name = "weezl"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2005,6 +1986,25 @@ dependencies = [
  "web-sys",
  "wgpu-core",
  "wgpu-types",
+]
+
+[[package]]
+name = "wgpu-benchmark"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "cgmath",
+ "env_logger",
+ "fs_extra",
+ "futures",
+ "glob",
+ "image",
+ "log",
+ "shaderc",
+ "tobj",
+ "wgpu",
+ "winit",
 ]
 
 [[package]]
