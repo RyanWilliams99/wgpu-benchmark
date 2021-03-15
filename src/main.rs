@@ -2,12 +2,15 @@ use std::iter;
 
 use cgmath::prelude::*;
 use wgpu::util::DeviceExt;
-use winit::{
-    event::*,
-    event_loop::{ControlFlow, EventLoop},
-    window::Window,
-};
 
+use winit::{dpi::LogicalSize, 
+    event::*, 
+    event_loop::{ControlFlow, EventLoop}, 
+    window::Window};
+
+
+
+    
 mod model;
 mod texture;
 
@@ -319,7 +322,7 @@ impl State {
             usage: wgpu::BufferUsage::UNIFORM | wgpu::BufferUsage::COPY_DST,
         });
 
-        const SPACE_BETWEEN: f32 = 1.0;
+        //const SPACE_BETWEEN: f32 = 1.0;
         let instances = (0..NUM_INSTANCES_PER_ROW)
             .flat_map(|z| {
                 (0..NUM_INSTANCES_PER_ROW).map(move |x| {
@@ -397,8 +400,7 @@ impl State {
         let vs_module = device.create_shader_module(wgpu::include_spirv!("shader.vert.spv"));
         let fs_module = device.create_shader_module(wgpu::include_spirv!("shader.frag.spv"));
 
-        let depth_texture =
-            texture::Texture::create_depth_texture(&device, &sc_desc, "depth_texture");
+        let depth_texture = texture::Texture::create_depth_texture(&device, &sc_desc, "depth_texture");
 
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
@@ -507,9 +509,9 @@ impl State {
                     resolve_target: None,
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
+                            r: 0.0,
+                            g: 0.0,
+                            b: 0.0,
                             a: 1.0,
                         }),
                         store: true,
@@ -544,10 +546,18 @@ fn main() {
     env_logger::init();
     let event_loop = EventLoop::new();
     let title = env!("CARGO_PKG_NAME");
+
+    let mut resizeable = false;
+    
     let window = winit::window::WindowBuilder::new()
         .with_title(title)
+        .set_inner_size(winit::dpi::PhysicalSize::new(400.0, 200.0))
+        .with_resizable(false)
         .build(&event_loop)
         .unwrap();
+        
+
+
 
     use futures::executor::block_on;
     let mut state = block_on(State::new(&window));
