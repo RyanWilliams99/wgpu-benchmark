@@ -301,9 +301,9 @@ impl State {
                 ],
                 label: Some("texture_bind_group_layout"),
             });
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////// Camer view here
         let camera = Camera {
-            eye: (5.0, 5.0, 5.0).into(),
+            eye: (1.0, 1.0, 1.0).into(),
             target: (0.0, 0.0, 0.0).into(),
             up: cgmath::Vector3::unit_y(),
             aspect: sc_desc.width as f32 / sc_desc.height as f32,
@@ -388,7 +388,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("mug/mug.obj"),
+            res_dir.join("chair/chair.obj"),
             //res_dir.join("cube/cube.obj"),
             //res_dir.join("liberty/LibertStatue.obj"),
             //res_dir.join("boat/boat.obj"),
