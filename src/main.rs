@@ -388,7 +388,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("chair/chair.obj"),
+            res_dir.join("monkey/monkey2k.obj"),
             //res_dir.join("cube/cube.obj"),
             //res_dir.join("liberty/LibertStatue.obj"),
             //res_dir.join("boat/boat.obj"),
