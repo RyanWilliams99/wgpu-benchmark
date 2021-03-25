@@ -8,9 +8,6 @@ use winit::{dpi::LogicalSize,
     event_loop::{ControlFlow, EventLoop}, 
     window::Window};
 
-
-
-    
 mod model;
 mod texture;
 
@@ -476,6 +473,7 @@ impl State {
         self.depth_texture =
             texture::Texture::create_depth_texture(&self.device, &self.sc_desc, "depth_texture");
     }
+
     fn input(&mut self, event: &WindowEvent) -> bool {
         self.camera_controller.process_events(event)
     }
@@ -543,9 +541,7 @@ fn main() {
 
     let start = Instant::now();
     
-    let duration = start.elapsed();
-
-    println!("Time elapsed in expensive_function() is: {:?}", duration);
+    //START WGPU
 
 
     env_logger::init();
@@ -608,4 +604,11 @@ fn main() {
             _ => {}
         }
     });
+
+
+    //END WGPU
+
+    let duration = start.elapsed();
+
+    println!("Time elapsed in expensive_function() is: {:?}", duration);
 }
