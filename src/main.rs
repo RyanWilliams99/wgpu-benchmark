@@ -1,4 +1,4 @@
-use std::iter;
+use std::{iter, time::Instant};
 
 use cgmath::prelude::*;
 use wgpu::util::DeviceExt;
@@ -540,6 +540,14 @@ impl State {
 }
 
 fn main() {
+
+    let start = Instant::now();
+    
+    let duration = start.elapsed();
+
+    println!("Time elapsed in expensive_function() is: {:?}", duration);
+
+
     env_logger::init();
     let event_loop = EventLoop::new();
     let title = env!("CARGO_PKG_NAME");
