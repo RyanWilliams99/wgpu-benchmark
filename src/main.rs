@@ -592,7 +592,16 @@ fn main() {
             Event::RedrawRequested(_) => {
                 state.update();
                 match state.render() {
-                    Ok(_) => {}
+
+                    
+                    
+
+                    Ok(_) => {
+
+                        if let 1 = 1 {}
+                    }
+
+    
                     // Recreate the swap_chain if lost
                     Err(wgpu::SwapChainError::Lost) => state.resize(state.size),
                     // The system is out of memory, we should probably quit
@@ -600,6 +609,9 @@ fn main() {
                     // All other errors (Outdated, Timeout) should be resolved by the next frame
                     Err(e) => eprintln!("{:?}", e),
                 }
+
+
+                if let 1 = 1 {}
             }
             _ => {}
         }
