@@ -592,16 +592,11 @@ fn main() {
             Event::RedrawRequested(_) => {
                 state.update();
                 match state.render() {
-
+                    Ok(_) => if let 1 = 1 {
+                    let duration = start.elapsed();
+                    std::println!("Time elapsed is: {:?}", duration);
+                    std::process::exit(1);}
                     
-                    
-
-                    Ok(_) => {
-
-                        if let 1 = 1 {}
-                    }
-
-    
                     // Recreate the swap_chain if lost
                     Err(wgpu::SwapChainError::Lost) => state.resize(state.size),
                     // The system is out of memory, we should probably quit
@@ -618,9 +613,5 @@ fn main() {
     });
 
 
-    //END WGPU
-
-    let duration = start.elapsed();
-
-    println!("Time elapsed in expensive_function() is: {:?}", duration);
+    
 }
