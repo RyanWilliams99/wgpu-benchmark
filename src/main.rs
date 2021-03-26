@@ -300,7 +300,7 @@ impl State {
             });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////// Camer view here
         let camera = Camera {
-            eye: (0.5, 0.5, 0.5).into(),
+            eye: (5.0, 5.0, 5.0).into(),
             target: (0.0, 0.0, 0.0).into(),
             up: cgmath::Vector3::unit_y(),
             aspect: sc_desc.width as f32 / sc_desc.height as f32,
@@ -385,7 +385,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("viking-room/viking-room.obj"),
+            res_dir.join("mug/mug.obj"),
 
 
         )
@@ -393,6 +393,7 @@ impl State {
 
         let vs_module = device.create_shader_module(wgpu::include_spirv!("shader.vert.spv"));
         let fs_module = device.create_shader_module(wgpu::include_spirv!("shader.frag.spv"));
+
 
         let depth_texture = texture::Texture::create_depth_texture(&device, &sc_desc, "depth_texture");
 
@@ -539,10 +540,8 @@ impl State {
 
 fn main() {
 
+    //Start timer
     let start = Instant::now();
-    
-    //START WGPU
-
 
     env_logger::init();
     let event_loop = EventLoop::new();
@@ -593,10 +592,11 @@ fn main() {
                 state.update();
                 match state.render() {
                     Ok(_) => if let 1 = 1 {
-                    let duration = start.elapsed().as_millis();
-                    std::println!("Time elapsed is: {:?}ms", duration);
-                    std::process::exit(1);}
-                    
+                        //End timer
+                        let duration = start.elapsed().as_millis();
+                        std::println!("Time elapsed is: {:?}ms", duration);
+                        std::process::exit(1);
+                    }
                     // Recreate the swap_chain if lost
                     Err(wgpu::SwapChainError::Lost) => state.resize(state.size),
                     // The system is out of memory, we should probably quit
@@ -604,14 +604,8 @@ fn main() {
                     // All other errors (Outdated, Timeout) should be resolved by the next frame
                     Err(e) => eprintln!("{:?}", e),
                 }
-
-
-                if let 1 = 1 {}
             }
             _ => {}
         }
     });
-
-
-    
 }
