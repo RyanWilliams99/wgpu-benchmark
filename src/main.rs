@@ -593,8 +593,8 @@ fn main() {
                 state.update();
                 match state.render() {
                     Ok(_) => if let 1 = 1 {
-                    let duration = start.elapsed();
-                    std::println!("Time elapsed is: {:?}", duration);
+                    let duration = start.elapsed().as_millis();
+                    std::println!("Time elapsed is: {:?}ms", duration);
                     std::process::exit(1);}
                     
                     // Recreate the swap_chain if lost
