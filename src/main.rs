@@ -300,7 +300,7 @@ impl State {
             });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////// Camer view here
         let camera = Camera {
-            eye: (5.0, 5.0, 5.0).into(),
+            eye: (0.5, 0.5, 0.5).into(),
             target: (0.0, 0.0, 0.0).into(),
             up: cgmath::Vector3::unit_y(),
             aspect: sc_desc.width as f32 / sc_desc.height as f32,
@@ -385,7 +385,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("mug/mug.obj"),
+            res_dir.join("viking-room/viking-room.obj"),
 
 
         )
@@ -592,10 +592,16 @@ fn main() {
                 state.update();
                 match state.render() {
                     Ok(_) => if let 1 = 1 {
+                        /*
                         //End timer
                         let duration = start.elapsed().as_millis();
                         std::println!("Time elapsed is: {:?}ms", duration);
-                        std::process::exit(1);
+                        use std::io::{stdin,stdout,Write};
+                        let mut s=String::new();
+                        let _=stdout().flush();
+                        stdin().read_line(&mut s).expect("Did not enter a correct string");
+                        //std::process::exit(1);
+                        */
                     }
                     // Recreate the swap_chain if lost
                     Err(wgpu::SwapChainError::Lost) => state.resize(state.size),
