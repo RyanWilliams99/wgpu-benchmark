@@ -2,6 +2,7 @@
 
 Renders a .obj file from /res
 
+To build
 1. Install rust
 2. Browse to directory
 3. Check paths to model and shaders
