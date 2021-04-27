@@ -2,8 +2,6 @@
 
 Renders a .obj file from /res
 
-writes the time to render a single frame to console
-
 1. Install rust
 2. Browse to directory
 3. Check paths to model and shaders
