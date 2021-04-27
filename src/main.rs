@@ -300,7 +300,7 @@ impl State {
             });
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////// Camer view here
         let camera = Camera {
-            eye: (0.5, 0.5, 0.5).into(),
+            eye: (1.0, 1.0, 1.0).into(),
             target: (0.0, 0.0, 0.0).into(),
             up: cgmath::Vector3::unit_y(),
             aspect: sc_desc.width as f32 / sc_desc.height as f32,
@@ -385,7 +385,7 @@ impl State {
             &device,
             &queue,
             &texture_bind_group_layout,
-            res_dir.join("viking-room/viking-room.obj"),
+            res_dir.join("chair/chair.obj"),
 
 
         )
