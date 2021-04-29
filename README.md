@@ -1,7 +1,5 @@
 # wgpu-benchmark
 
-Renders a .obj file from /res
-
 To build
 1. Install rust
 2. Browse to directory
